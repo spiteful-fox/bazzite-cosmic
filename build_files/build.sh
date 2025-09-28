@@ -2,23 +2,123 @@
 
 set -ouex pipefail
 
-### Install packages
 
-# Packages can be installed from any enabled yum repo on the image.
-# RPMfusion repos are available by default in ublue main images
-# List of rpmfusion packages can be found here:
-# https://mirrors.rpmfusion.org/mirrorlist?path=free/fedora/updates/39/x86_64/repoview/index.html&protocol=https&redirect=1
+# Remove KDE
 
-# this installs a package from fedora repos
-dnf5 install -y tmux 
+systemctl disable sddm.service
 
-# Use a COPR Example:
-#
-# dnf5 -y copr enable ublue-os/staging
-# dnf5 -y install package
-# Disable COPRs so they don't end up enabled on the final image:
-# dnf5 -y copr disable ublue-os/staging
+dnf5 remove -y \
+plasma-desktop \
+plasma-workspace \
+plasma-workspace-wallpapers \
+plasma-workspace-wayland \
+sddm \
+sddm-breeze \
+sddm-kcm \
+sddm-wayland-plasma \
+akonadi-server \
+akonadi-server-mysql \
+ark \
+audiocd-kio \
+bluedevil \
+breeze-icon-theme \
+colord-kde \
+dolphin \
+ffmpegthumbs \
+filelight \
+flatpak-kcm \
+kaccounts-integration-qt6 \
+kaccounts-providers \
+kcharselect \
+kde-connect \
+kde-gtk-config \
+kde-inotify-survey \
+kde-partitionmanager \
+kde-settings-pulseaudio \
+kdebugsettings \
+kdegraphics-thumbnailers \
+kdenetwork-filesharing \
+kdeplasma-addons \
+kdialog \
+kdnssd \
+kf6-baloo-file \
+kfind \
+khelpcenter \
+kinfocenter \
+kio-admin \
+kio-gdrive \
+kjournald \
+kmenuedit \
+konsole \
+krdp \
+krfb \
+kscreen \
+kscreenlocker \
+ksshaskpass \
+kunifiedpush \
+kwalletmanager5 \
+kwebkitpart \
+kwin \
+kwrite \
+libappindicator-gtk3 \
+pam-kwallet \
+phonon-qt6-backend-vlc \
+pinentry-qt \
+plasma-breeze \
+plasma-desktop-doc \
+plasma-discover \
+plasma-discover-notifier \
+plasma-disks \
+plasma-drkonqi \
+plasma-nm \
+plasma-nm-l2tp \
+plasma-nm-openconnect \
+plasma-nm-openswan \
+plasma-nm-openvpn \
+plasma-nm-pptp \
+plasma-nm-vpnc \
+plasma-pa \
+plasma-print-manager \
+plasma-systemmonitor \
+plasma-thunderbolt \
+plasma-vault \
+plasma-welcome \
+polkit-kde \
+samba-usershares \
+signon-kwallet-extension \
+spectacle \
+vlc-plugin-gstreamer \
+plasma-pk-updates \
+xdg-desktop-portal-kde \
+xwaylandvideobridge
+dnf5 autoremove -y
 
-#### Example for enabling a System Unit File
+# Install COSMIC
 
-systemctl enable podman.socket
+dnf5 install -y \
+cosmic-applets \
+cosmic-bg \
+cosmic-comp \
+cosmic-edit \
+cosmic-files \
+cosmic-greeter \
+cosmic-launcher \
+cosmic-notifications \
+cosmic-osd \
+cosmic-panel \
+cosmic-randr \
+cosmic-screenshot \
+cosmic-session \
+cosmic-settings \
+cosmic-term \
+cosmic-workspaces \
+cosmic-idle \
+cosmic-player \
+cosmic-wallpapers \
+cosmic-app-library \
+cosmic-icon-theme \
+cosmic-settings-daemon \
+xdg-desktop-portal-cosmic \
+gnome-keyring
+
+systemctl enable cosmic-greeter.service

@@ -15,6 +15,12 @@ on:
         options:
           - amd64
           - arm64
+      image-type:
+        required: true
+        type: choice
+        options:
+          - main
+          - nvidia
   pull_request:
     branches:
       - main
@@ -59,6 +65,13 @@ jobs:
           echo "DISK_TYPE=${DISK_TYPE}" >> ${GITHUB_ENV}
           echo "USER_UID=${USER_UID}" >> ${GITHUB_ENV}
           echo "USER_GID=${USER_GID}" >> ${GITHUB_ENV}
+          
+          # Set image name based on input
+          if [[ "${{ inputs.image-type }}" == "nvidia" ]]; then
+            echo "TARGET_IMAGE_NAME=${IMAGE_NAME}-nvidia-open" >> ${GITHUB_ENV}
+          else
+            echo "TARGET_IMAGE_NAME=${IMAGE_NAME}" >> ${GITHUB_ENV}
+          fi
 
       - name: Install dependencies
         if: inputs.platform == 'arm64'
@@ -83,7 +96,7 @@ jobs:
         with:
           builder-image: ${{ env.BIB_IMAGE }}
           config-file: ${{ matrix.disk-type == 'anaconda-iso' && './disk_config/iso.toml' || './disk_config/disk.toml' }}
-          image: ${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }}
+          image: ${{ env.IMAGE_REGISTRY }}/${{ env.TARGET_IMAGE_NAME }}:${{ env.DEFAULT_TAG }}
           chown: ${{ env.USER_UID }}:${{ env.USER_GID }}
           types: ${{ matrix.disk-type }}
           additional-args: --use-librepo=True
