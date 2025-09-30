@@ -12,6 +12,13 @@ I decided I wanted to mess with COSMIC for a little bit, but the other custom im
 
 So I decided to just do it myself. This is "clean" desktop Bazzite, with COSMIC, with hopefully few leftovers from any other DE, and nothing else. If anything extra gets added to it, it's because I noticed something important "missing" after taking away the KDE packages, but there probably won't be a whole lot of that.
 
+At the moment, that list of "missing" things is:
+- `gnome-keyring` & `seahorse`: to replace kwallet
+- `file-roller`: to replace Ark
+- `gnome-system-monitor`: to replace Plasma's system monitor
+
+Importantly, Bazzite installs several components through Flatpak when it is first installed (e.g. Gwenview for KDE). Those won't go anywhere when you switch to this, so you'll have to swap them out yourself for e.g. GNOME equivalents yourself.
+
 If you want it:
 
 ```sh

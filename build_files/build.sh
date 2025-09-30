@@ -118,7 +118,19 @@ cosmic-wallpapers \
 cosmic-app-library \
 cosmic-icon-theme \
 cosmic-settings-daemon \
-xdg-desktop-portal-cosmic \
-gnome-keyring
+xdg-desktop-portal-cosmic
 
 systemctl enable cosmic-greeter.service
+
+# Stuff that Fedora COSMIC Atomic supplies
+dnf5 install -y \
+gnome-keyring \
+gnome-system-monitor \
+
+# Things I consider "missing", because the Bazzite KDE installation comes with equivalents.
+#
+# - seahorse: Fedora COSMIC Atomic comes with gnome-keyring. Seahorse is the GUI for managing that
+# - file-roller: Fedora COSMIC Atomic comes with Ark, but GTK apps are better for COSMIC, no?
+dnf5 install -y \
+seahorse \
+file-roller 
