@@ -90,7 +90,15 @@ spectacle \
 vlc-plugin-gstreamer \
 plasma-pk-updates \
 xdg-desktop-portal-kde \
-xwaylandvideobridge
+xwaylandvideobridge 
+
+# Remove KDE-specific stuff that Bazzite installed
+dnf5 remove -y \
+steamdeck-kde-presets-desktop \
+krdp \
+wallpaper-engine-kde-plugin \
+krunner-bazaar \
+
 dnf5 autoremove -y
 
 # Install COSMIC
