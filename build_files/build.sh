@@ -90,7 +90,7 @@ spectacle \
 vlc-plugin-gstreamer \
 plasma-pk-updates \
 xdg-desktop-portal-kde \
-xwaylandvideobridge 
+xwaylandvideobridge
 
 # Remove KDE-specific stuff that Bazzite installed
 dnf5 remove -y \
@@ -132,8 +132,7 @@ systemctl enable cosmic-greeter.service
 
 # Stuff that Fedora COSMIC Atomic supplies
 dnf5 install -y \
-gnome-keyring \
-gnome-system-monitor \
+gnome-keyring
 
 # Things I consider "missing", because the Bazzite KDE installation comes with equivalents.
 #
@@ -141,4 +140,4 @@ gnome-system-monitor \
 # - file-roller: Fedora COSMIC Atomic comes with Ark, but GTK apps are better for COSMIC, no?
 dnf5 install -y \
 seahorse \
-file-roller 
+file-roller
