@@ -3,12 +3,12 @@ name: Build COSMIC nightly container images
 on:
   pull_request:
     branches:
-      - main
+      - nightly
   schedule:
     - cron: "05 10 * * *" # 10:05am UTC daily for COSMIC nightly builds
   push:
     branches:
-      - main
+      - nightly
     paths-ignore:
       - "**/README.md"
   workflow_dispatch:
@@ -77,7 +77,7 @@ jobs:
             org.opencontainers.image.created=${{ steps.date.outputs.date }}
             org.opencontainers.image.description=${{ env.IMAGE_DESC }}
             org.opencontainers.image.documentation=https://raw.githubusercontent.com/${{ github.repository_owner }}/bazzite-cosmic/refs/heads/main/README.md
-            org.opencontainers.image.source=https://github.com/${{ github.repository_owner }}/bazzite-cosmic/blob/main/Containerfile.cosmic-nightly
+            org.opencontainers.image.source=https://github.com/${{ github.repository_owner }}/bazzite-cosmic/blob/main/Containerfile
             org.opencontainers.image.title=${{ env.IMAGE_NAME }}
             org.opencontainers.image.url=https://github.com/${{ github.repository_owner }}/bazzite-cosmic
             org.opencontainers.image.vendor=${{ github.repository_owner }}
@@ -96,7 +96,7 @@ jobs:
         uses: redhat-actions/buildah-build@7a95fa7ee0f02d552a32753e7414641a04307056 # v2
         with:
           containerfiles: |
-            ./Containerfile.cosmic-nightly
+            ./Containerfile
           # Postfix image name with -custom to make it a little more descriptive
           # Syntax: https://docs.github.com/en/actions/learn-github-actions/expressions#format
           image: ${{ env.IMAGE_NAME }}
@@ -109,7 +109,7 @@ jobs:
         uses: redhat-actions/buildah-build@7a95fa7ee0f02d552a32753e7414641a04307056 # v2
         with:
           containerfiles: |
-            ./Containerfile.cosmic-nightly.nvidia
+            ./Containerfile.nvidia
           image: ${{ env.IMAGE_NAME }}-nvidia-open
           tags: ${{ steps.metadata.outputs.tags }}
           labels: ${{ steps.metadata.outputs.labels }}
