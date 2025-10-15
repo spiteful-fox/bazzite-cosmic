@@ -1,5 +1,5 @@
 ---
-name: Build disk images
+name: Build COSMIC nightly disk images
 
 on:
   workflow_dispatch:
@@ -15,24 +15,18 @@ on:
         options:
           - amd64
           - arm64
-      image-type:
-        required: true
-        type: choice
-        options:
-          - main
-          - nvidia
-          - cosmic-nightly
-          - cosmic-nightly-nvidia
+  schedule:
+    - cron: '15 10 * * *'  # 10:15am UTC daily (15 minutes after container build)
   pull_request:
     branches:
       - main
     paths:
       - './disk_config/disk.toml'
       - './disk_config/iso.toml'
-      - './.github/workflows/build-disk.yml'
+      - './.github/workflows/build-disk-nightly.yml'
 
 env:
-  IMAGE_NAME: ${{ github.event.repository.name }} # output of build.yml, keep in sync
+  IMAGE_NAME: ${{ github.event.repository.name }}-cosmic-nightly # output of build-nightly.yml
   IMAGE_REGISTRY: "ghcr.io/${{ github.repository_owner }}"  # do not edit
   DEFAULT_TAG: "latest"
   BIB_IMAGE: "ghcr.io/lorbuschris/bootc-image-builder:20250608" # "quay.io/centos-bootc/bootc-image-builder:latest" - see https://github.com/osbuild/bootc-image-builder/pull/954
@@ -43,11 +37,12 @@ concurrency:
 
 jobs:
   build:
-    name: Build disk images
+    name: Build COSMIC nightly disk images
     runs-on: ${{ inputs.platform == 'amd64' && 'ubuntu-24.04' || 'ubuntu-24.04-arm' }}
     strategy:
       fail-fast: false
       matrix:
+        image-type: ["cosmic-nightly", "cosmic-nightly-nvidia"]
         disk-type: ["qcow2", "anaconda-iso"]
     permissions:
       contents: read
@@ -68,13 +63,9 @@ jobs:
           echo "USER_UID=${USER_UID}" >> ${GITHUB_ENV}
           echo "USER_GID=${USER_GID}" >> ${GITHUB_ENV}
 
-          # Set image name based on input
-          if [[ "${{ inputs.image-type }}" == "nvidia" ]]; then
+          # Set image name based on type
+          if [[ "${{ matrix.image-type }}" == "cosmic-nightly-nvidia" ]]; then
             echo "TARGET_IMAGE_NAME=${IMAGE_NAME}-nvidia-open" >> ${GITHUB_ENV}
-          elif [[ "${{ inputs.image-type }}" == "cosmic-nightly" ]]; then
-            echo "TARGET_IMAGE_NAME=${IMAGE_NAME}-cosmic-nightly" >> ${GITHUB_ENV}
-          elif [[ "${{ inputs.image-type }}" == "cosmic-nightly-nvidia" ]]; then
-            echo "TARGET_IMAGE_NAME=${IMAGE_NAME}-cosmic-nightly-nvidia-open" >> ${GITHUB_ENV}
           else
             echo "TARGET_IMAGE_NAME=${IMAGE_NAME}" >> ${GITHUB_ENV}
           fi
@@ -102,14 +93,8 @@ jobs:
         with:
           builder-image: ${{ env.BIB_IMAGE }}
           config-file: ${{ matrix.disk-type == 'anaconda-iso' && './disk_config/iso.toml' || './disk_config/disk.toml' }}
-          # Set the default tag based on image type for nightly builds
-          IMAGE_TAG="${{ env.DEFAULT_TAG }}"
-          if [[ "${{ inputs.image-type }}" == "cosmic-nightly" ]] || [[ "${{ inputs.image-type }}" == "cosmic-nightly-nvidia" ]]; then
-            # For nightly builds, use today's date as the tag
-            IMAGE_TAG="$(date +%Y%m%d)"
-          fi
-
-          image: ${{ env.IMAGE_REGISTRY }}/${{ env.TARGET_IMAGE_NAME }}:${IMAGE_TAG}
+          # For nightly builds, use today's date as the tag
+          image: ${{ env.IMAGE_REGISTRY }}/${{ env.TARGET_IMAGE_NAME }}:$(date +%Y%m%d)
           chown: ${{ env.USER_UID }}:${{ env.USER_GID }}
           types: ${{ matrix.disk-type }}
           additional-args: --use-librepo=True
