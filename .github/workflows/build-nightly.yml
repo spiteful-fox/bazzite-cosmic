@@ -4,8 +4,6 @@ on:
   pull_request:
     branches:
       - nightly
-  schedule:
-    - cron: "05 10 * * *" # 10:05am UTC daily for COSMIC nightly builds
   push:
     branches:
       - nightly
