@@ -1,16 +1,16 @@
 ---
 name: Build COSMIC container images
 on:
-  pull_request:
-    branches:
-      - main
+  #  pull_request:
+  #    branches:
+  #      - main
   schedule:
     - cron: "05 10 * * 1" # 10:05am UTC every Monday for weekly stable COSMIC builds
-  push:
-    branches:
-      - main
-    paths-ignore:
-      - "**/README.md"
+  #  push:
+  #    branches:
+  #      - main
+  #    paths-ignore:
+  #      - "**/README.md"
   workflow_dispatch:
 
 env:
@@ -29,7 +29,6 @@ jobs:
   build_push:
     name: Build and push image
     runs-on: ubuntu-24.04
-    if: ${{ github.event_name == 'schedule' || !contains(github.event.head_commit.message, '[no-ci]') }}
 
     permissions:
       contents: read

@@ -1,4 +1,4 @@
-name: Build nightly container images (scheduled only)
+name: Build nightly container images
 on:
   schedule:
     - cron: "05 12 * * *" # 12:05pm UTC daily for COSMIC nightly builds
