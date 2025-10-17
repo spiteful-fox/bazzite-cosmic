@@ -1,7 +1,7 @@
-name: Build COSMIC nightly container images (scheduled only)
+name: Build nightly container images (scheduled only)
 on:
   schedule:
-    - cron: "05 12 * * *" # 12:05am UTC daily for COSMIC nightly builds
+    - cron: "05 12 * * *" # 12:05pm UTC daily for COSMIC nightly builds
   workflow_dispatch:
 
 env:

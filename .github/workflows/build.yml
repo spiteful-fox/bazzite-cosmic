@@ -1,5 +1,5 @@
 ---
-name: Build container image
+name: Build COSMIC container images
 on:
   pull_request:
     branches:
@@ -29,6 +29,7 @@ jobs:
   build_push:
     name: Build and push image
     runs-on: ubuntu-24.04
+    if: ${{ github.event_name == 'schedule' || !contains(github.event.head_commit.message, '[no-ci]') }}
 
     permissions:
       contents: read
