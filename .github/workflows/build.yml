@@ -1,9 +1,9 @@
 ---
 name: Build COSMIC container images
 on:
-  #  pull_request:
-  #    branches:
-  #      - main
+  pull_request:
+    branches:
+      - main
   schedule:
     - cron: "05 10 * * 1" # 10:05am UTC every Monday for weekly stable COSMIC builds
   #  push:
