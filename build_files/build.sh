@@ -5,17 +5,14 @@ set -ouex pipefail
 
 # Remove KDE
 
-systemctl disable sddm.service
+systemctl disable plasmalogin.service
 
 dnf5 remove -y \
 plasma-desktop \
+plasma-login-manager \
 plasma-workspace \
 plasma-workspace-wallpapers \
 plasma-workspace-wayland \
-sddm \
-sddm-breeze \
-sddm-kcm \
-sddm-wayland-plasma \
 akonadi-server \
 akonadi-server-mysql \
 ark \
@@ -30,11 +27,13 @@ flatpak-kcm \
 kaccounts-integration-qt6 \
 kaccounts-providers \
 kcharselect \
+kcm-plasmalogin \
 kde-connect \
 kde-gtk-config \
 kde-inotify-survey \
 kde-partitionmanager \
 kde-settings-pulseaudio \
+kde-settings-plasmalogin \
 kdebugsettings \
 kdegraphics-thumbnailers \
 kdenetwork-filesharing \
